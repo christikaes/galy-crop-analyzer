@@ -1,3 +1,5 @@
+import { data } from "./cropsData";
+
 export type Crop = {
   id: string;
   name: string;
@@ -5,6 +7,10 @@ export type Crop = {
   marketScore: number;
   esgScore: number;
   regulatoryScore: number;
+  technicalDescription: string;
+  marketDescription: string;
+  esgDescription: string;
+  regulatoryDescription: string;
 };
 
 const crops = [
@@ -75,14 +81,26 @@ const crops = [
 ];
 
 export const getData = async () => {
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const useTestData = urlParams.get("test-data");
+
   return Promise.resolve(
-    crops.map((crop) => ({
-      id: crop,
-      name: crop,
-      technicalScore: Math.floor(Math.random() * 100),
-      marketScore: Math.floor(Math.random() * 100),
-      esgScore: Math.floor(Math.random() * 100),
-      regulatoryScore: Math.floor(Math.random() * 100),
-    }))
+    useTestData
+      ? crops.map((crop) => ({
+          id: crop,
+          name: crop,
+          technicalScore: Math.floor(Math.random() * 100),
+          marketScore: Math.floor(Math.random() * 100),
+          esgScore: Math.floor(Math.random() * 100),
+          regulatoryScore: Math.floor(Math.random() * 100),
+        }))
+      : data.map((d) => ({
+          ...d,
+          technicalScore: d.technicalScore * 10,
+          marketScore: d.marketScore * 10,
+          esgScore: d.esgScore * 10,
+          regulatoryScore: d.regulatoryScore * 10,
+        }))
   );
 };

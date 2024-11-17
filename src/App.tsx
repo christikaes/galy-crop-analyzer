@@ -102,10 +102,20 @@ function App() {
               <li style={{ fontWeight: "bold" }}>
                 Weighted Score: {getWeightedTotal(data)}
               </li>
-              <li>Technical Score: {data.technicalScore}</li>
-              <li>Market Score: {data.marketScore}</li>
-              <li>ESG Score: {data.esgScore}</li>
-              <li>Regulatory Score: {data.regulatoryScore}</li>
+              <li>
+                Technical Score: {data.technicalScore}
+                {data.technicalDescription}
+              </li>
+              <li>
+                Market Score: {data.marketScore} {data.marketDescription}
+              </li>
+              <li>
+                ESG Score: {data.esgScore} {data.esgDescription}
+              </li>
+              <li>
+                Regulatory Score: {data.regulatoryScore}
+                {data.regulatoryDescription}
+              </li>
             </ul>
           </div>
         ))}
