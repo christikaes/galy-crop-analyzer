@@ -11,6 +11,8 @@ import {
   RadialLinearScale,
 } from "chart.js";
 import { Slider } from "./App";
+import { Crop } from "./getData";
+import { getColor } from "./getColor";
 
 // Register required components with Chart.js
 ChartJS.register(
@@ -24,43 +26,66 @@ ChartJS.register(
   RadialLinearScale
 );
 
-const applyWeights = (data: number[], sliders: Slider[]) => {
-  return data.map((d, i) => (sliders[i].weight / 100) * d);
-};
+export const RadarChart = ({
+  sliders,
+  crops,
+}: {
+  sliders: Slider[];
+  crops: Crop[];
+}) => {
+  const applyWeights = (data: number[]) => {
+    return data.map((d, i) => (sliders[i].weight / 100) * d);
+  };
 
-export const RadarChart = ({ sliders }: { sliders: Slider[] }) => {
   const data = {
-    labels: ["Market", "ESG", "Regulatory"],
-    datasets: [
-      {
-        label: "Corn",
-        data: applyWeights([65, 59, 90], sliders),
-        fill: true,
-        backgroundColor: "rgba(0, 0, 0, 0.8)",
-        borderColor: "rgb(255, 99, 132)",
-        pointBackgroundColor: "rgb(255, 99, 132)",
-        pointBorderColor: "#fff",
-        pointHoverBackgroundColor: "#fff",
-        pointHoverBorderColor: "rgb(255, 99, 132)",
-      },
-      {
-        label: "Apples",
-        data: applyWeights([28, 48, 40], sliders),
-        fill: true,
-        backgroundColor: "rgba(0, 0, 0, 0.8)",
-        borderColor: "rgb(54, 162, 235)",
-        pointBackgroundColor: "rgb(54, 162, 235)",
-        pointBorderColor: "#fff",
-        pointHoverBackgroundColor: "#fff",
-        pointHoverBorderColor: "rgb(54, 162, 235)",
-      },
-    ],
+    labels: ["Technology", "Market", "ESG", "Regulatory"],
+    datasets: crops.map((crop) => ({
+      label: crop.name,
+      data: applyWeights([
+        crop.technicalScore,
+        crop.marketScore,
+        crop.esgScore,
+        crop.regulatoryScore,
+      ]),
+      // fill: false,
+      // backgroundColor: "rgba(255, 255, 255, 0.8)",
+      // pointBorderColor: "#fff",
+      // pointHoverBackgroundColor: "#fff",
+      borderColor: getColor(crop.name),
+      pointBackgroundColor: getColor(crop.name),
+      pointHoverBorderColor: getColor(crop.name),
+    })),
   };
 
   const options = {
+    plugins: {
+      // 'legend' now within object 'plugins {}'
+      legend: {
+        labels: {
+          color: "white", // not 'fontColor:' anymore
+          // fontSize: 18  // not 'fontSize:' anymore
+          font: {
+            size: 14, // 'size' now within object 'font {}'
+          },
+        },
+      },
+    },
     elements: {
       line: {
         borderWidth: 3,
+      },
+    },
+    scales: {
+      r: {
+        angleLines: {
+          color: "#434343",
+        },
+        grid: {
+          color: "#434343",
+        },
+        pointLabels: {
+          color: "white",
+        },
       },
     },
   };
