@@ -7,8 +7,6 @@ export type Crop = {
   regulatoryScore: number;
 };
 
-type Data = Crop[];
-
 const crops = [
   "Hemp",
   "Poppy",
